@@ -1,11 +1,12 @@
 export enum Mode {
-  NORMAL = "NORMAL",
+  OFF = "OFF",
+  COMMAND = "COMMAND",
   INSERT = "INSERT",
   VISUAL = "VISUAL",
 }
 
 export class VimState {
-  private _mode: Mode = Mode.NORMAL;
+  private _mode: Mode = Mode.OFF;
   private _clipboard: string = "";
 
   setMode(newMode: Mode) {
@@ -18,12 +19,16 @@ export class VimState {
     return this._mode;
   }
 
+  isInOffMode(): boolean {
+    return this._mode === Mode.OFF;
+  }
+
   isInInsertMode(): boolean {
     return this._mode === Mode.INSERT;
   }
 
-  isInNormalMode(): boolean {
-    return this._mode === Mode.NORMAL;
+  isInCommandMode(): boolean {
+    return this._mode === Mode.COMMAND;
   }
 
   isInVisualMode(): boolean {

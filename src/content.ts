@@ -11,7 +11,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.enabled) {
       state.setMode(Mode.INSERT);
     } else {
-      state.setMode(Mode.NORMAL);
+      state.setMode(Mode.COMMAND);
     }
   }
 });
