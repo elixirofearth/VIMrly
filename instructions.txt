@@ -1,7 +1,10 @@
 Commands:
 1. npm i typescript -g
 2. npm install @types/chrome --save-dev
-3. To run, do npm run build or npm run watch
+3. npm install --save-dev copy-webpack-plugin
+4. npm install --save-dev mini-css-extract-plugin
+5. npm install --save-dev webpack
+6. To run, do npm run build or npm run watch
 
 Dev:
 Load the Extension in Chrome:

@@ -1,9 +1,23 @@
 {
-  "devDependencies": {
-    "@types/chrome": "^0.0.280"
-  },
+  "name": "vim-google-docs-extension",
+  "version": "1.0.0",
+  "description": "Chrome Extension to use Vim motions on Google Docs.",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w"
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "lint": "echo \"No linting configured\""
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^6.7.3",
+    "mini-css-extract-plugin": "^2.9.2",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^4.10.0"
   }
 }
