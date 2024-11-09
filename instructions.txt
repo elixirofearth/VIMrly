@@ -1,0 +1,10 @@
+Commands:
+1. npm i typescript -g
+2. npm install @types/chrome --save-dev
+3. To run, do npm run build or npm run watch
+
+Dev:
+Load the Extension in Chrome:
+- Open Chrome and go to chrome://extensions/.
+- Enable "Developer mode" in the top right corner.
+- Click "Load unpacked" and select the project’s vim-google-docs-extension folder.

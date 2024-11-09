@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@types/chrome": "^0.0.280"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  }
+}
