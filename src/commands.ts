@@ -1,6 +1,5 @@
 import { VimState, Mode } from "./state";
 
-// Add clipboard state to VimState
 declare module "./state" {
   interface VimState {
     clipboard: string;
@@ -8,6 +7,31 @@ declare module "./state" {
     getClipboard(): string;
   }
 }
+
+// Google Docs specific utilities
+const getEditor = (): Document | null => {
+  const iframe = document.querySelector(
+    "iframe.docs-texteventtarget-iframe"
+  ) as HTMLIFrameElement;
+  return iframe?.contentWindow?.document || null;
+};
+
+const getEditorCanvas = (): Element | null => {
+  return document.querySelector(".kix-appview-editor");
+};
+
+const simulateNativeEvent = (
+  element: Element,
+  eventType: string,
+  options: KeyboardEventInit = {}
+) => {
+  const event = new KeyboardEvent(eventType, {
+    bubbles: true,
+    cancelable: true,
+    ...options,
+  });
+  element.dispatchEvent(event);
+};
 
 export function handleCommand(key: string, state: VimState) {
   if (state.isInCommandMode()) {
@@ -20,6 +44,9 @@ export function handleCommand(key: string, state: VimState) {
 }
 
 function handleCommandMode(key: string, state: VimState) {
+  const editor = getEditor();
+  if (!editor) return;
+
   switch (key) {
     case "i":
       state.setMode(Mode.INSERT);
@@ -28,22 +55,22 @@ function handleCommandMode(key: string, state: VimState) {
       state.setMode(Mode.VISUAL);
       break;
     case "h":
-      moveCursorLeft();
+      moveCursorLeft(editor);
       break;
     case "j":
-      moveCursorDown();
+      moveCursorDown(editor);
       break;
     case "k":
-      moveCursorUp();
+      moveCursorUp(editor);
       break;
     case "l":
-      moveCursorRight();
+      moveCursorRight(editor);
       break;
     case "d":
       if (state.isInVisualMode()) {
         deleteSelectedText(state);
       } else {
-        deleteCurrentLine();
+        deleteCurrentLine(editor);
       }
       break;
     case "y":
@@ -53,13 +80,10 @@ function handleCommandMode(key: string, state: VimState) {
       pasteText(state);
       break;
     case "0":
-      moveCursorToLineStart();
+      moveCursorToLineStart(editor);
       break;
     case "$":
-      moveCursorToLineEnd();
-      break;
-    default:
-      console.log(`Unrecognized command: ${key}`);
+      moveCursorToLineEnd(editor);
       break;
   }
 }
@@ -67,26 +91,33 @@ function handleCommandMode(key: string, state: VimState) {
 function handleInsertMode(key: string, state: VimState) {
   if (key === "Escape" || key === "Esc") {
     state.setMode(Mode.COMMAND);
+    const editor = getEditor();
+    if (editor) {
+      editor.body.blur();
+    }
   }
 }
 
 function handleVisualMode(key: string, state: VimState) {
+  const editor = getEditor();
+  if (!editor) return;
+
   if (key === "Escape" || key === "Esc") {
     state.setMode(Mode.COMMAND);
-    clearSelection();
+    clearSelection(editor);
   } else {
     switch (key) {
       case "h":
-        extendSelectionLeft();
+        extendSelectionLeft(editor);
         break;
       case "j":
-        extendSelectionDown();
+        extendSelectionDown(editor);
         break;
       case "k":
-        extendSelectionUp();
+        extendSelectionUp(editor);
         break;
       case "l":
-        extendSelectionRight();
+        extendSelectionRight(editor);
         break;
       case "y":
         yankText(state);
@@ -101,108 +132,96 @@ function handleVisualMode(key: string, state: VimState) {
 }
 
 function yankText(state: VimState) {
-  const selection = window.getSelection();
-  if (selection && selection.toString()) {
+  const editor = getEditor();
+  if (!editor) return;
+
+  document.execCommand("copy");
+  const selection = editor.getSelection();
+  if (selection?.toString()) {
     state.setClipboard(selection.toString());
-    clearSelection();
-  } else {
-    // If no selection, yank current line
-    simulateKeyPressWithModifiers(["Control", "Shift"], "ArrowLeft");
-    const lineSelection = window.getSelection();
-    if (lineSelection) {
-      state.setClipboard(lineSelection.toString());
-      clearSelection();
-    }
+    clearSelection(editor);
   }
 }
 
 function pasteText(state: VimState) {
+  const editor = getEditor();
+  if (!editor) return;
+
   const clipboardText = state.getClipboard();
   if (clipboardText) {
-    // Use the browser's clipboard API to paste text
     navigator.clipboard.writeText(clipboardText).then(() => {
-      simulateKeyPressWithModifiers(["Control"], "v");
+      document.execCommand("paste");
     });
   }
 }
 
 function deleteSelectedText(state: VimState) {
-  const selection = window.getSelection();
-  if (selection && selection.toString()) {
-    state.setClipboard(selection.toString()); // Save to clipboard before deleting
-    simulateKeyPress("Delete");
+  const editor = getEditor();
+  if (!editor) return;
+
+  const selection = editor.getSelection();
+  if (selection?.toString()) {
+    state.setClipboard(selection.toString());
+    document.execCommand("delete");
   }
 }
 
-function clearSelection() {
-  window.getSelection()?.removeAllRanges();
+function clearSelection(editor: Document) {
+  editor.getSelection()?.removeAllRanges();
 }
 
-function extendSelectionLeft() {
-  simulateKeyPressWithModifiers(["Shift"], "ArrowLeft");
+function moveCursorLeft(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", { key: "ArrowLeft" });
 }
 
-function extendSelectionRight() {
-  simulateKeyPressWithModifiers(["Shift"], "ArrowRight");
+function moveCursorRight(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", { key: "ArrowRight" });
 }
 
-function extendSelectionUp() {
-  simulateKeyPressWithModifiers(["Shift"], "ArrowUp");
+function moveCursorUp(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", { key: "ArrowUp" });
 }
 
-function extendSelectionDown() {
-  simulateKeyPressWithModifiers(["Shift"], "ArrowDown");
+function moveCursorDown(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", { key: "ArrowDown" });
 }
 
-function moveCursorToLineStart() {
-  simulateKeyPress("Home");
+function moveCursorToLineStart(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", { key: "Home" });
 }
 
-function moveCursorToLineEnd() {
-  simulateKeyPress("End");
+function moveCursorToLineEnd(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", { key: "End" });
 }
 
-// Existing movement and utility functions remain the same
-function moveCursorLeft() {
-  simulateKeyPress("ArrowLeft");
+function deleteCurrentLine(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", { key: "Delete" });
 }
 
-function moveCursorRight() {
-  simulateKeyPress("ArrowRight");
-}
-
-function moveCursorUp() {
-  simulateKeyPress("ArrowUp");
-}
-
-function moveCursorDown() {
-  simulateKeyPress("ArrowDown");
-}
-
-function deleteCurrentLine() {
-  simulateKeyPressWithModifiers(["Control", "Shift"], "ArrowLeft");
-  simulateKeyPress("Backspace");
-}
-
-function simulateKeyPress(key: string) {
-  const event = new KeyboardEvent("keydown", {
-    key: key,
-    bubbles: true,
-    cancelable: true,
+function extendSelectionLeft(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowLeft",
+    shiftKey: true,
   });
-  document.dispatchEvent(event);
 }
 
-function simulateKeyPressWithModifiers(modifiers: string[], key: string) {
-  const eventInit: KeyboardEventInit = {
-    key: key,
-    bubbles: true,
-    cancelable: true,
-    shiftKey: modifiers.includes("Shift"),
-    ctrlKey: modifiers.includes("Control"),
-    altKey: modifiers.includes("Alt"),
-    metaKey: modifiers.includes("Meta"),
-  };
-  const event = new KeyboardEvent("keydown", eventInit);
-  document.dispatchEvent(event);
+function extendSelectionRight(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowRight",
+    shiftKey: true,
+  });
+}
+
+function extendSelectionUp(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowUp",
+    shiftKey: true,
+  });
+}
+
+function extendSelectionDown(editor: Document) {
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowDown",
+    shiftKey: true,
+  });
 }

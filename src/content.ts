@@ -1,18 +1,12 @@
 import { VimState, Mode } from "./state";
 import { handleCommand } from "./commands";
 
-// Initialize Vim state
 const state = new VimState();
-
-// Create the status bar element
 let statusBar: HTMLDivElement | null = null;
 
-
-// Function to handle the state update based on mode
 function setMode(mode: Mode) {
   state.setMode(mode);
-  
-  // Create the status bar only if it doesn't exist
+
   if (!statusBar) {
     statusBar = document.createElement("div");
     statusBar.id = "vim-status-bar";
@@ -30,75 +24,64 @@ function setMode(mode: Mode) {
     document.body.appendChild(statusBar);
   }
 
-  // Show or hide the status bar based on mode
   if (statusBar) {
-    if (mode === Mode.COMMAND) {
-      statusBar.textContent = `MODE: ${state.mode}`;
-      statusBar.style.display = "block"; // Show status bar when in COMMAND mode
-    } else {
-      statusBar.style.display = "none"; // Hide status bar when in OFF mode
-    }
+    statusBar.textContent = `MODE: ${state.mode}`;
+    statusBar.style.display = mode === Mode.OFF ? "none" : "block";
   }
 }
 
-// Add message listener for toggling the command mode
+// Wait for Google Docs to load
+function waitForDocsLoad() {
+  const editorCheck = setInterval(() => {
+    const editor = document.querySelector("iframe.docs-texteventtarget-iframe");
+    if (editor) {
+      clearInterval(editorCheck);
+      init();
+    }
+  }, 1000);
+}
+
+function init() {
+  setMode(Mode.OFF);
+
+  // Listen for key events on the Google Docs editor iframe
+  const editor = document.querySelector(
+    "iframe.docs-texteventtarget-iframe"
+  ) as HTMLIFrameElement;
+  if (editor && editor.contentWindow) {
+    const editorDocument = editor.contentWindow.document;
+    editorDocument.addEventListener("keydown", handleKeydown, true);
+  }
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  const interceptedKeys = [
+    "h",
+    "j",
+    "k",
+    "l",
+    "i",
+    "v",
+    "d",
+    "y",
+    "p",
+    "Escape",
+    "Esc",
+  ];
+
+  if (!state.isInOffMode() && interceptedKeys.includes(event.key)) {
+    event.preventDefault();
+    event.stopPropagation();
+    handleCommand(event.key, state);
+  }
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "toggleCommandMode") {
     const isEnabled = message.enabled;
-    if (isEnabled) {
-      setMode(Mode.COMMAND); // Set to COMMAND mode
-    } else {
-      setMode(Mode.OFF); // Set to OFF mode
-    }
+    setMode(isEnabled ? Mode.COMMAND : Mode.OFF);
   }
 });
 
-// Initialize the extension
-function init() {
-  // Ensure the DOM is ready before proceeding
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  } else {
-    onDomContentLoaded();
-  }
-}
-
-// Fallback when DOM is loaded
-function onDomContentLoaded() {
-  setMode(Mode.OFF); // Set to OFF by default
-  document.addEventListener("keydown", (event) => {
-    const activeElement = document.activeElement as HTMLElement;
-
-    // If in Insert mode and focused on input fields, do not intercept
-    if (
-      state.isInInsertMode() &&
-      (activeElement.tagName === "INPUT" ||
-        activeElement.tagName === "TEXTAREA" ||
-        activeElement.isContentEditable)
-    ) {
-      return;
-    }
-
-    // Prevent default behavior for intercepted keys
-    const interceptedKeys = [
-      "h",
-      "j",
-      "k",
-      "l",
-      "i",
-      "v",
-      "d",
-      "y",
-      "p",
-      "Escape",
-      "Esc",
-    ];
-    if (interceptedKeys.includes(event.key)) {
-      event.preventDefault();
-      handleCommand(event.key, state);
-    }
-  });
-}
-
-// Wait for the DOM to load before initializing
-init();
+// Start waiting for Google Docs to load
+waitForDocsLoad();
