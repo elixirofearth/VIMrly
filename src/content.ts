@@ -1,5 +1,3 @@
-// src/content.ts
-
 import { VimState, Mode } from "./state";
 import { handleCommand } from "./commands";
 

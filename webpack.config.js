@@ -9,8 +9,8 @@ module.exports = {
   entry: {
     content: "./src/content.ts",
     background: "./src/background.ts",
+    popup: "./src/popup.ts", // Added popup entry
     styles: "./src/styles.css",
-    // Add 'popup: "./src/popup.ts"' if you have a popup
   },
   module: {
     rules: [
@@ -41,6 +41,7 @@ module.exports = {
       patterns: [
         { from: "manifest.json", to: "." },
         { from: "assets/icons", to: "assets/icons" },
+        { from: "src/popup.html", to: "." }, // Copy popup.html to dist
       ],
     }),
   ],
