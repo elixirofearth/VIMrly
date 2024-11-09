@@ -1,10 +1,20 @@
-// src/content.ts
-
 import { VimState, Mode } from "./state";
 import { handleCommand } from "./commands";
 
 // Initialize Vim state
 const state = new VimState();
+
+// Add message listener
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "toggleInsertMode") {
+    console.log(`Toggling insert mode: ${message.enabled}`);
+    if (message.enabled) {
+      state.setMode(Mode.INSERT);
+    } else {
+      state.setMode(Mode.NORMAL);
+    }
+  }
+});
 
 // Create and display the status bar
 function createStatusBar() {
