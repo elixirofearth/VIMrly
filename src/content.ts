@@ -6,12 +6,11 @@ const state = new VimState();
 
 // Add message listener
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "toggleInsertMode") {
-    console.log(`Toggling insert mode: ${message.enabled}`);
+  if (message.type === "toggleCommandMode") {
     if (message.enabled) {
-      state.setMode(Mode.INSERT);
-    } else {
       state.setMode(Mode.COMMAND);
+    } else {
+      state.setMode(Mode.OFF);
     }
   }
 });
