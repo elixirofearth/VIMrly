@@ -326,6 +326,18 @@ __webpack_require__.r(__webpack_exports__);
 
 // Initialize Vim state
 const state = new _state__WEBPACK_IMPORTED_MODULE_0__.VimState();
+// Add message listener
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === "toggleInsertMode") {
+        console.log(`Toggling insert mode: ${message.enabled}`);
+        if (message.enabled) {
+            state.setMode(_state__WEBPACK_IMPORTED_MODULE_0__.Mode.INSERT);
+        }
+        else {
+            state.setMode(_state__WEBPACK_IMPORTED_MODULE_0__.Mode.NORMAL);
+        }
+    }
+});
 // Create and display the status bar
 function createStatusBar() {
     const statusBar = document.createElement("div");
