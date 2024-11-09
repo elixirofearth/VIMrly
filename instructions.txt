@@ -7,4 +7,4 @@ Dev:
 Load the Extension in Chrome:
 - Open Chrome and go to chrome://extensions/.
 - Enable "Developer mode" in the top right corner.
-- Click "Load unpacked" and select the project’s vim-google-docs-extension folder.
+- Click "Load unpacked" and select the project’s VIMrly folder.
