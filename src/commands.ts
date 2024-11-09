@@ -10,8 +10,8 @@ declare module "./state" {
 }
 
 export function handleCommand(key: string, state: VimState) {
-  if (state.isInNormalMode()) {
-    handleNormalMode(key, state);
+  if (state.isInCommandMode()) {
+    handleCommandMode(key, state);
   } else if (state.isInInsertMode()) {
     handleInsertMode(key, state);
   } else if (state.isInVisualMode()) {
@@ -19,7 +19,7 @@ export function handleCommand(key: string, state: VimState) {
   }
 }
 
-function handleNormalMode(key: string, state: VimState) {
+function handleCommandMode(key: string, state: VimState) {
   switch (key) {
     case "i":
       state.setMode(Mode.INSERT);
@@ -66,13 +66,13 @@ function handleNormalMode(key: string, state: VimState) {
 
 function handleInsertMode(key: string, state: VimState) {
   if (key === "Escape" || key === "Esc") {
-    state.setMode(Mode.NORMAL);
+    state.setMode(Mode.COMMAND);
   }
 }
 
 function handleVisualMode(key: string, state: VimState) {
   if (key === "Escape" || key === "Esc") {
-    state.setMode(Mode.NORMAL);
+    state.setMode(Mode.COMMAND);
     clearSelection();
   } else {
     switch (key) {
@@ -90,11 +90,11 @@ function handleVisualMode(key: string, state: VimState) {
         break;
       case "y":
         yankText(state);
-        state.setMode(Mode.NORMAL);
+        state.setMode(Mode.COMMAND);
         break;
       case "d":
         deleteSelectedText(state);
-        state.setMode(Mode.NORMAL);
+        state.setMode(Mode.COMMAND);
         break;
     }
   }

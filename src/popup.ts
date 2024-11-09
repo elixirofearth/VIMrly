@@ -1,16 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const insertModeCheckbox = document.getElementById(
-    "enable-insert-mode"
+  const turnOnCheckbox = document.getElementById(
+    "turn-on"
   ) as HTMLInputElement;
 
   // Load the current setting from storage
   chrome.storage.sync.get(["enableInsertMode"], (result) => {
-    insertModeCheckbox.checked = result.enableInsertMode !== false;
+    turnOnCheckbox.checked = result.enableInsertMode ?? false; // Default to false
   });
 
   // Update the setting when the checkbox state changes
-  insertModeCheckbox.addEventListener("change", () => {
-    const isEnabled = insertModeCheckbox.checked;
+  turnOnCheckbox.addEventListener("change", () => {
+    const isEnabled = turnOnCheckbox.checked;
     chrome.storage.sync.set({ enableInsertMode: isEnabled }, () => {
       // Send message to content script
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
