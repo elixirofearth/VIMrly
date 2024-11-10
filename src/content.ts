@@ -91,6 +91,10 @@ function handleKeydown(event: KeyboardEvent) {
 
   // If we're in visual mode
   else if (state.isInVisualMode()) {
+    if (globalKeys.includes(event.key)) {
+      handleCommand(event.key, state);
+    }
+    // Let all other keys pass through naturally
     if (!globalKeys.includes(event.key) && !commandKeys.includes(event.key) && !commandKeysCore.includes(event.key)) {
       event.preventDefault();
       event.stopPropagation();

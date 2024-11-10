@@ -46,6 +46,7 @@ export function handleCommand(key: string, state: VimState) {
   } else if (state.isInInsertMode()) {
     handleInsertMode(key, state);
   } else if (state.isInVisualMode()) {
+    console.log("Handling visual mode:", key);
     handleVisualMode(key, state);
   }
 }
@@ -209,7 +210,6 @@ function handleInsertMode(key: string, state: VimState) {
 function handleVisualMode(key: string, state: VimState) {
   const editor = getEditor();
   if (!editor) return;
-
   if (key === "Escape" || key === "Esc") {
     state.setMode(Mode.COMMAND);
     clearSelection(editor);
