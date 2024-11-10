@@ -102,7 +102,7 @@ function handleCommandMode(key: string, state: VimState) {
             yankText(state);
             break;
         }
-      }, 100); // 500 ms timeout for a second key
+      }, 500); // 500 ms timeout for a second key
       return;
     }
 
@@ -186,14 +186,14 @@ function yankLine(state: VimState) {
     shiftKey: true
   });
 
-  // Store the selected text to navigator.clipboard
-  // wait for a small delay to ensure selection is complete
-  setTimeout(() => {
-    navigator.clipboard.writeText(editor.getSelection()?.toString() || "")
-      .then(() => console.log("Line copied to clipboard:", editor.getSelection()?.toString()))
-      .catch(err => console.error("Failed to copy line to clipboard:", err));
-  }, 100);
-
+  const copyMenuItem = document.querySelector('[aria-label="Copy c"]');
+  if (copyMenuItem) {
+    simulateClick(copyMenuItem as HTMLElement);
+    console.log("Copy menu item clicked successfully");
+  } else {
+    console.error("Copy menu item not found");
+  }
+  
 }
 
 function handleInsertMode(key: string, state: VimState) {
@@ -257,21 +257,28 @@ function handleVisualMode(key: string, state: VimState) {
 }
 
 function yankText(state: VimState) {
+  // Simulated event Shift+ArrowRight to select text
   const editor = getEditor();
   if (!editor) return;
 
-  // Add a small delay to ensure selection is complete
-  setTimeout(() => {
-    const selection = editor.getSelection();
-    if (selection?.toString()) {
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowRight",
+    code: "ArrowRight",
+    keyCode: 39,
+    which: 39,
+    shiftKey: true,
+    ctrlKey: false
+    
+  });
 
-      // Also try to store in system clipboard
-      navigator.clipboard.writeText(selection.toString()).catch(console.error);
-      
-      // Clear the selection
-      clearSelection(editor);
-    }
-  }, 50);
+  const copyMenuItem = document.querySelector('[aria-label="Copy c"]');
+  if (copyMenuItem) {
+    simulateClick(copyMenuItem as HTMLElement);
+    console.log("Copy menu item clicked successfully");
+  } else {
+    console.error("Copy menu item not found");
+  }
+
 }
 
 
