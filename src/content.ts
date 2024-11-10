@@ -91,14 +91,27 @@ function handleKeydown(event: KeyboardEvent) {
 
   // If we're in visual mode
   else if (state.isInVisualMode()) {
-    // Similar handling as command mode
-    if (!globalKeys.includes(event.key) && !commandKeys.includes(event.key)) {
+    if (!globalKeys.includes(event.key) && !commandKeys.includes(event.key) && !commandKeysCore.includes(event.key)) {
       event.preventDefault();
       event.stopPropagation();
       return;
     }
 
-    handleCommand(event.key, state);
+    // If there's a pending command, prevent default for any key
+    if (state.pendingCommand) {
+      event.preventDefault();
+      event.stopPropagation();
+      handleCommand(event.key, state);
+      return;
+    }
+
+    // Handle the command key
+    // if the key is a command key, prevent the default action and stop the event from propagating
+    if (commandKeys.includes(event.key)) {
+      event.preventDefault();
+      event.stopPropagation();
+      handleCommand(event.key, state);
+    }
   }
 
   // If we're in insert mode, let all keys through EXCEPT Escape

@@ -102,7 +102,7 @@ function handleCommandMode(key: string, state: VimState) {
             yankText(state);
             break;
         }
-      }, 100); // 500 ms timeout for a second key
+      }, 500); // 500 ms timeout for a second key
       return;
     }
 
@@ -315,11 +315,14 @@ function deleteSelectedText(state: VimState) {
   const editor = getEditor();
   if (!editor) return;
 
-  const selection = editor.getSelection();
-  if (selection?.toString()) {
-    navigator.clipboard.writeText(selection.toString()).catch(console.error);
-    document.execCommand("delete");
-  }
+  // Press Delete to delete the selected text 
+  console.log("Deleting selected text");
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "Delete",
+    code: "Delete",
+    keyCode: 46,
+    which: 46
+  });
 }
 
 function clearSelection(editor: Document) {
