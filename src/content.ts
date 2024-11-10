@@ -1,10 +1,10 @@
 import { VimState, Mode } from "./state";
 import { handleCommand } from "./commands";
 
-const state = new VimState();
+export const state = new VimState();
 let statusBar: HTMLDivElement | null = null;
 
-function setMode(mode: Mode) {
+export function setMode(mode: Mode) {
   state.setMode(mode);
 
   if (!statusBar) {
@@ -57,16 +57,26 @@ function init() {
 function handleKeydown(event: KeyboardEvent) {
   const globalKeys = ["Escape", "Esc"];
 
-  const commandKeys = ["h", "j", "k", "l", "i", "v", "d", "y", "p"];
-  const commandKeysCore = ["ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight"];
+  const commandKeys = ["h", "j", "k", "l", "i", "v", "d", "b", "w", "g", "y", "p", "G", "0", "$", "u", ".", ":", "q"];
+  const commandKeysCore = ["ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight", "Delete", "Home", "End"];
+
 
   // If we're in command mode
   if (state.isInCommandMode()) {
     // Allow only command keys and global keys
     // if the key is not a command key or a global key, prevent the default action
+    
     if (!globalKeys.includes(event.key) && !commandKeys.includes(event.key) && !commandKeysCore.includes(event.key)) {
       event.preventDefault();
       event.stopPropagation();
+      return;
+    }
+
+    // If there's a pending command, prevent default for any key
+    if (state.pendingCommand) {
+      event.preventDefault();
+      event.stopPropagation();
+      handleCommand(event.key, state);
       return;
     }
 

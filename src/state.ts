@@ -8,6 +8,17 @@ export enum Mode {
 export class VimState {
   private _mode: Mode = Mode.OFF;
   private _clipboard: string = "";
+  pendingCommand: string = "";  
+  lastCommand: string = "";     
+
+  // Add these new methods
+  setPendingCommand(command: string) {
+    this.pendingCommand = command;
+  }
+
+  setLastCommand(command: string) {
+    this.lastCommand = command;
+  }
 
   setMode(newMode: Mode) {
     this._mode = newMode;
