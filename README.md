@@ -1,7 +1,7 @@
 # VIMrly
-Vim Motions for Google Docs.
+Vim Motions Chrome Extension for Google Docs.
 
-Built at DevEdmonton 3.0 Hackathon 2024.
+Built at DevelopEd 3.0 Hackathon 2024.
 
 Created by:
 1. Andy Tran (aqtran@ualberta.ca)
