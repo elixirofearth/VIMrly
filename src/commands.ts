@@ -30,6 +30,8 @@ const simulateNativeEvent = (
     cancelable: true,
     ...options,
   });
+  
+  console.log("Simulating Native event", event);
   element.dispatchEvent(event);
 };
 
@@ -171,57 +173,105 @@ function clearSelection(editor: Document) {
 }
 
 function moveCursorLeft(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { key: "ArrowLeft" });
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowLeft", 
+    code: "ArrowLeft", 
+    keyCode: 37, 
+    which: 37 
+  });
 }
 
 function moveCursorRight(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { key: "ArrowRight" });
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowRight", 
+    code: "ArrowRight", 
+    keyCode: 39, 
+    which: 39 
+  });
 }
 
 function moveCursorUp(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { key: "ArrowUp" });
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowUp", 
+    code: "ArrowUp", 
+    keyCode: 38, 
+    which: 38 
+  });
 }
 
 function moveCursorDown(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { key: "ArrowDown" });
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowDown", 
+    code: "ArrowDown", 
+    keyCode: 40, 
+    which: 40 
+  });
 }
 
 function moveCursorToLineStart(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { key: "Home" });
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "Home", 
+    code: "Home", 
+    keyCode: 36, 
+    which: 36 
+  });
 }
 
 function moveCursorToLineEnd(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { key: "End" });
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "End", 
+    code: "End", 
+    keyCode: 35, 
+    which: 35 
+  });
 }
 
 function deleteCurrentLine(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { key: "Delete" });
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "Delete", 
+    code: "Delete", 
+    keyCode: 46, 
+    which: 46 
+  });
 }
 
 function extendSelectionLeft(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", {
-    key: "ArrowLeft",
-    shiftKey: true,
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowLeft", 
+    code: "ArrowLeft", 
+    keyCode: 37, 
+    which: 37, 
+    shiftKey: true 
   });
 }
 
 function extendSelectionRight(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", {
-    key: "ArrowRight",
-    shiftKey: true,
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowRight", 
+    code: "ArrowRight", 
+    keyCode: 39, 
+    which: 39, 
+    shiftKey: true 
   });
 }
 
 function extendSelectionUp(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", {
-    key: "ArrowUp",
-    shiftKey: true,
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowUp", 
+    code: "ArrowUp", 
+    keyCode: 38, 
+    which: 38, 
+    shiftKey: true 
   });
 }
 
 function extendSelectionDown(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", {
-    key: "ArrowDown",
-    shiftKey: true,
+  simulateNativeEvent(editor.body, "keydown", { 
+    key: "ArrowDown", 
+    code: "ArrowDown", 
+    keyCode: 40, 
+    which: 40, 
+    shiftKey: true 
   });
 }
+
