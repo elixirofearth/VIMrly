@@ -46,6 +46,7 @@ export function handleCommand(key: string, state: VimState) {
   } else if (state.isInInsertMode()) {
     handleInsertMode(key, state);
   } else if (state.isInVisualMode()) {
+    console.log("Handling visual mode:", key);
     handleVisualMode(key, state);
   }
 }
@@ -209,7 +210,6 @@ function handleInsertMode(key: string, state: VimState) {
 function handleVisualMode(key: string, state: VimState) {
   const editor = getEditor();
   if (!editor) return;
-
   if (key === "Escape" || key === "Esc") {
     state.setMode(Mode.COMMAND);
     clearSelection(editor);
@@ -322,11 +322,14 @@ function deleteSelectedText(state: VimState) {
   const editor = getEditor();
   if (!editor) return;
 
-  const selection = editor.getSelection();
-  if (selection?.toString()) {
-    navigator.clipboard.writeText(selection.toString()).catch(console.error);
-    document.execCommand("delete");
-  }
+  // Press Delete to delete the selected text 
+  console.log("Deleting selected text");
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "Delete",
+    code: "Delete",
+    keyCode: 46,
+    which: 46
+  });
 }
 
 function clearSelection(editor: Document) {
