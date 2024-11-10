@@ -3,7 +3,7 @@
   "name": "Vim for Google Docs",
   "version": "1.0.0",
   "description": "Use Vim motions in Google Docs.",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["activeTab", "scripting", "storage", "clipboardRead", "clipboardWrite"],
   "host_permissions": ["https://docs.google.com/*"],
   "content_scripts": [
     {
