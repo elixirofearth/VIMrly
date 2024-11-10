@@ -464,17 +464,27 @@ function extendSelectionDown(editor: Document) {
 
 function moveToNextWord(editor: Document, visualMode = false) {
   // In Google Docs, Ctrl+ArrowRight moves to the next word
+  // use ctrlKey: true to simulate Ctrl key press if in Windows
   let packet = {
     key: "ArrowRight",
     code: "ArrowRight",
     keyCode: 39,
     which: 39,
     ctrlKey: true,
-    shiftKey: false
+    shiftKey: false,
+    metaKey: false
   }
   if (visualMode) {
     packet.shiftKey = true;
   }
+
+  // Detect if the user is on macOS using userAgent
+  const isMac = /Mac/i.test(navigator.userAgent);
+  if (isMac) {
+    packet.metaKey = true;
+    packet.ctrlKey = false;
+  }
+
   simulateNativeEvent(editor.body, "keydown", packet);
 }
 
@@ -485,11 +495,19 @@ function moveToBackWord(editor: Document, visualMode = false) {
     keyCode: 37,
     which: 37,
     ctrlKey: true,
-    shiftKey: false
+    shiftKey: false,
+    metaKey: false
   }
   if (visualMode) {
     packet.shiftKey = true;
   }
+  // Detect if the user is on macOS using userAgent
+  const isMac = /Mac/i.test(navigator.userAgent);
+  if (isMac) {
+    packet.metaKey = true;
+    packet.ctrlKey = false;
+  }
+
   // In Google Docs, Ctrl+ArrowLeft moves to the previous word
   simulateNativeEvent(editor.body, "keydown", packet);
 }
@@ -543,17 +561,23 @@ function simulateClick(element: HTMLElement) {
 
 function performUndo() {
   const undoButton = document.querySelector('div[data-tooltip="Undo (Ctrl+Z)"]') as HTMLElement;
+  const undoButtonMac = document.querySelector('div[data-tooltip="Undo (⌘Z)"]') as HTMLElement;
+
   if (undoButton) {
     simulateClick(undoButton);
+  } else if (undoButtonMac) {
+    simulateClick(undoButtonMac);
   } else {
     console.warn("Undo button not found.");
   }
 }
-
 function performRedo() {
   const redoButton = document.querySelector('div[data-tooltip="Redo (Ctrl+Y)"]') as HTMLElement;
+  const redoButtonMac = document.querySelector('div[data-tooltip="Redo (⌘Y)"]') as HTMLElement;
   if (redoButton) {
     simulateClick(redoButton);
+  } else if (redoButtonMac) {
+    simulateClick(redoButtonMac);
   } else {
     console.warn("Redo button not found.");
   }
