@@ -232,11 +232,11 @@ function handleVisualMode(key: string, state: VimState) {
         state.setMode(Mode.COMMAND);
         break;
       case "w":
-        moveToNextWord(editor);
+        moveToNextWord(editor, true);
         break;
       case "b":
         console.log("Moving back a word");
-        moveToBackWord(editor);
+        moveToBackWord(editor, true);
         break
       case "p":
         pasteText(state);
@@ -462,26 +462,36 @@ function extendSelectionDown(editor: Document) {
   });
 }
 
-function moveToNextWord(editor: Document) {
+function moveToNextWord(editor: Document, visualMode = false) {
   // In Google Docs, Ctrl+ArrowRight moves to the next word
-  simulateNativeEvent(editor.body, "keydown", {
+  let packet = {
     key: "ArrowRight",
     code: "ArrowRight",
     keyCode: 39,
     which: 39,
-    ctrlKey: true
-  });
+    ctrlKey: true,
+    shiftKey: false
+  }
+  if (visualMode) {
+    packet.shiftKey = true;
+  }
+  simulateNativeEvent(editor.body, "keydown", packet);
 }
 
-function moveToBackWord(editor: Document) {
-  // In Google Docs, Ctrl+ArrowLeft moves to the previous word
-  simulateNativeEvent(editor.body, "keydown", {
+function moveToBackWord(editor: Document, visualMode = false) {
+  let packet = {
     key: "ArrowLeft",
     code: "ArrowLeft",
     keyCode: 37,
     which: 37,
-    ctrlKey: true
-  });
+    ctrlKey: true,
+    shiftKey: false
+  }
+  if (visualMode) {
+    packet.shiftKey = true;
+  }
+  // In Google Docs, Ctrl+ArrowLeft moves to the previous word
+  simulateNativeEvent(editor.body, "keydown", packet);
 }
 
 function moveCursorToDocStart(editor: Document) {
