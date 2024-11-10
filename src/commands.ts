@@ -64,6 +64,7 @@ function handleCommandMode(key: string, state: VimState) {
    // Handle double-letter commands
   if (state.pendingCommand) {
     const fullCommand = state.pendingCommand + key;
+    console.log("Full command:", fullCommand);
     state.setLastCommand(key);
     state.setPendingCommand("");
 
@@ -86,11 +87,24 @@ function handleCommandMode(key: string, state: VimState) {
     }
   } 
 
-  // Set pending command for potential double-letter commands
-  if (key === "g" || key === "y" || key === ":" || key === "d") {
-    state.setPendingCommand(key);
-    return;
-  }
+    // Set a pending command for potential double-letter commands and add a timeout
+    if (key === "g" || key === "y" || key === "d") {
+      state.setPendingCommand(key);
+      let commandTimeout = setTimeout(() => {
+        console.log("Single key command:", key);
+        state.setPendingCommand("");
+        // Execute single-key command if no second key is pressed
+        switch (key) {
+          case "d":
+            deleteText(editor);
+            break;
+          case "y":
+            yankText(state);
+            break;
+        }
+      }, 100); // 500 ms timeout for a second key
+      return;
+    }
 
   // Clear any pending command if a different key is pressed
   state.setPendingCommand("");
@@ -250,8 +264,6 @@ function yankText(state: VimState) {
   setTimeout(() => {
     const selection = editor.getSelection();
     if (selection?.toString()) {
-      // Store in our internal clipboard
-      state.setClipboard(selection.toString());
 
       // Also try to store in system clipboard
       navigator.clipboard.writeText(selection.toString()).catch(console.error);
@@ -305,7 +317,7 @@ function deleteSelectedText(state: VimState) {
 
   const selection = editor.getSelection();
   if (selection?.toString()) {
-    state.setClipboard(selection.toString());
+    navigator.clipboard.writeText(selection.toString()).catch(console.error);
     document.execCommand("delete");
   }
 }
@@ -378,7 +390,25 @@ function deleteText(editor: Document) {
 }
 
 function deleteCurrentLine(editor: Document) {
+  // First move to the start of the line
+  moveCursorToLineStart(editor);
+  
+  // Press Shift+End to select to end of line
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "End",
+    code: "End",
+    keyCode: 35,
+    which: 35,
+    shiftKey: true
+  });
 
+  // Press Delete to delete the line
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "Delete",
+    code: "Delete",
+    keyCode: 46,
+    which: 46
+  });
 }
 
 
