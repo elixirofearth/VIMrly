@@ -102,7 +102,7 @@ function handleCommandMode(key: string, state: VimState) {
             yankText(state);
             break;
         }
-      }, 100); // 500 ms timeout for a second key
+      }, 500); // 500 ms timeout for a second key
       return;
     }
 
@@ -188,12 +188,14 @@ function yankLine(state: VimState) {
 
   // Store the selected text to navigator.clipboard
   // wait for a small delay to ensure selection is complete
-  setTimeout(() => {
-    navigator.clipboard.writeText(editor.getSelection()?.toString() || "")
-      .then(() => console.log("Line copied to clipboard:", editor.getSelection()?.toString()))
-      .catch(err => console.error("Failed to copy line to clipboard:", err));
-  }, 100);
-
+  const copyMenuItem = document.querySelector('[aria-label="Copy c"]');
+  if (copyMenuItem) {
+    simulateClick(copyMenuItem as HTMLElement);
+    console.log("Copy menu item clicked successfully");
+  } else {
+    console.error("Copy menu item not found");
+  }
+  
 }
 
 function handleInsertMode(key: string, state: VimState) {
