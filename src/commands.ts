@@ -53,6 +53,7 @@ export function handleCommand(key: string, state: VimState) {
 function handleCommandMode(key: string, state: VimState) {
   const editor = getEditor();
   if (!editor) return;
+  console.log("Handling command:", key);
 
   // Handle colon commands
   if (key === ":") {
@@ -74,6 +75,9 @@ function handleCommandMode(key: string, state: VimState) {
       case "yy":
         yankLine(state);
         return;
+      case "dd":
+        deleteCurrentLine(editor);
+        return;
       case ":q":
         setMode(Mode.OFF);
         clearSelection(editor);
@@ -83,7 +87,7 @@ function handleCommandMode(key: string, state: VimState) {
   } 
 
   // Set pending command for potential double-letter commands
-  if (key === "g" || key === "y" || key === ":") {
+  if (key === "g" || key === "y" || key === ":" || key === "d") {
     state.setPendingCommand(key);
     return;
   }
@@ -119,7 +123,7 @@ function handleCommandMode(key: string, state: VimState) {
       if (state.isInVisualMode()) {
         deleteSelectedText(state);
       } else {
-        deleteCurrentLine(editor);
+        deleteText(editor);
       }
       break;
     case "y":
@@ -364,7 +368,7 @@ function moveCursorToLineEnd(editor: Document) {
   });
 }
 
-function deleteCurrentLine(editor: Document) {
+function deleteText(editor: Document) {
   simulateNativeEvent(editor.body, "keydown", { 
     key: "Delete", 
     code: "Delete", 
@@ -372,6 +376,11 @@ function deleteCurrentLine(editor: Document) {
     which: 46 
   });
 }
+
+function deleteCurrentLine(editor: Document) {
+
+}
+
 
 function extendSelectionLeft(editor: Document) {
   simulateNativeEvent(editor.body, "keydown", { 
@@ -457,18 +466,45 @@ function moveCursorToDocEnd(editor: Document) {
   });
 }
 
+
+function simulateClick(element: HTMLElement) {
+  const mousedownEvent = new MouseEvent("mousedown", {
+    bubbles: true,
+    cancelable: true,
+    view: window,
+  });
+  const mouseupEvent = new MouseEvent("mouseup", {
+    bubbles: true,
+    cancelable: true,
+    view: window,
+  });
+  const clickEvent = new MouseEvent("click", {
+    bubbles: true,
+    cancelable: true,
+    view: window,
+  });
+
+  element.dispatchEvent(mousedownEvent);
+  element.dispatchEvent(mouseupEvent);
+  element.dispatchEvent(clickEvent);
+}
+
+
+
 function performUndo() {
-  // Find the undo button in Google Docs toolbar
-  const undoButton = document.querySelector('div[aria-label="Undo (⌘Z)"]') as HTMLElement;
+  const undoButton = document.querySelector('div[data-tooltip="Undo (Ctrl+Z)"]') as HTMLElement;
   if (undoButton) {
-    undoButton.click();
+    simulateClick(undoButton);
+  } else {
+    console.warn("Undo button not found.");
   }
 }
 
 function performRedo() {
-  // Find the redo button in Google Docs toolbar
-  const redoButton = document.querySelector('div[aria-label="Redo (⌘⇧Z)"]') as HTMLElement;
+  const redoButton = document.querySelector('div[data-tooltip="Redo (Ctrl+Y)"]') as HTMLElement;
   if (redoButton) {
-    redoButton.click();
+    simulateClick(redoButton);
+  } else {
+    console.warn("Redo button not found.");
   }
 }
