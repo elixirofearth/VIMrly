@@ -134,6 +134,5 @@ Developed by:
 
 - Andy Tran ([aqtran@ualberta.ca](mailto:aqtran@ualberta.ca))
 - Viet Chu ([vchu1@ualberta.ca](mailto:vchu1@ualberta.ca))
-- Sheikh Safwan Hossain ([sheikhsa@ualberta.ca](mailto:sheikhsa@ualberta.ca))
 
 Feel free to reach out for any questions or support regarding the **VIMrly** extension.
