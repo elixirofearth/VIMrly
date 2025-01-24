@@ -4,17 +4,6 @@
 
 VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into Google Docs, enhancing text editing efficiency and user productivity. Initially developed collaboratively during the **DevelopEd 3.0 Hackathon (2024)** 🏆 and further advanced 🚀, VIMrly aims to provide a seamless modal editing experience for Vim enthusiasts working within Google Docs.
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Steps](#steps)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-
 ## Features
 
 - **Vim-like Navigation:** Utilize `h`, `j`, `k`, `l` keys for efficient cursor movement within documents.
@@ -87,43 +76,6 @@ Click on the **VIMrly** extension icon in the Chrome toolbar to open the setting
 ### Monitor Mode Status:
 Observe the status bar at the bottom of the Google Docs interface, which displays the current mode (COMMAND, INSERT, or VISUAL).
 
-## Contributing
-
-Contributions are welcome! To contribute to **VIMrly**, follow these steps:
-
-1. **Fork the Repository:**
-
-Click the **Fork** button at the top right of the repository page to create your own copy.
-
-2. **Clone Your Fork:**
-    ```bash
-    git clone https://github.com/andynapoleon/VIMrly.git
-    cd VIMrly
-    ```
-
-3. **Create a Branch:**
-    ```bash
-    git checkout -b feature/your-feature-name
-    ```
-
-4. **Make Your Changes:**
-
-Implement your feature or fix bugs.
-
-5. **Commit Your Changes:**
-    ```bash
-    git commit -m "Add feature: your-feature-name"
-    ```
-
-6. **Push to Your Fork:**
-    ```bash
-    git push origin feature/your-feature-name
-    ```
-
-7. **Create a Pull Request:**
-
-Go to the original repository and create a pull request describing your changes.
-
 ## License
 
 This project is licensed under the Apache-2.0 License.
@@ -132,7 +84,7 @@ This project is licensed under the Apache-2.0 License.
 
 Developed by:
 
-- Andy Tran ([aqtran@ualberta.ca](mailto:aqtran@ualberta.ca))
+- Andy Tran ([aqtran@ualberta.ca](mailto:anhquoctran006@gmail.com)
 - Viet Chu ([vchu1@ualberta.ca](mailto:vchu1@ualberta.ca))
 
 Feel free to reach out for any questions or support regarding the **VIMrly** extension.
