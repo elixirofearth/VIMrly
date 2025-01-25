@@ -6,12 +6,11 @@ VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into G
 
 ## Features
 
-- **Vim-like Navigation:** Utilize `h`, `j`, `k`, `l` keys for efficient cursor movement within documents.
+- **Vim-like Navigation:** Utilize `h`, `j`, `k`, `l` keys for efficient cursor movement within documents, and many other commands!
 - **Modal Editing:** Switch between Command, Insert, and Visual modes to control editing behavior.
 - **Status Bar:** A dynamic status bar at the bottom displays the current mode for real-time feedback.
 - **Settings Popup:** Customize extension settings, such as enabling or disabling specific modes, through an intuitive popup interface.
 - **Seamless Integration:** Designed to work harmoniously with Google Docs without disrupting native functionalities.
-- **NOTICE:** Only very basic features have been implemented. More will come in the future.
 
 ## Installation
 
