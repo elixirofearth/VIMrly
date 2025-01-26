@@ -83,7 +83,7 @@ This project is licensed under the Apache-2.0 License.
 
 Developed by:
 
-- Andy Tran ([aqtran@ualberta.ca](mailto:anhquoctran006@gmail.com)
+- Andy Tran ([anhquoctran006@gmail.com](mailto:anhquoctran006@gmail.com))
 - Viet Chu ([vchu1@ualberta.ca](mailto:vchu1@ualberta.ca))
 
 Feel free to reach out for any questions or support regarding the **VIMrly** extension.
