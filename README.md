@@ -2,7 +2,7 @@
 
 ## Vim Motions Chrome Extension for Google Docs 📝
 
-VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into Google Docs, enhancing text editing efficiency and user productivity. Initially developed collaboratively during the **DevelopEd 3.0 Hackathon (2024)** 🏆 and further advanced 🚀, VIMrly aims to provide a seamless modal editing experience for Vim enthusiasts working within Google Docs.
+VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into Google Docs, enhancing text editing efficiency and user productivity. Built using TypeScript, Webpack, and Jest. Initially developed collaboratively during the **DevelopEd 3.0 Hackathon (2024)** 🏆 and further advanced 🚀, VIMrly aims to provide a seamless modal editing experience for Vim enthusiasts working within Google Docs.
 
 ## Features
 
