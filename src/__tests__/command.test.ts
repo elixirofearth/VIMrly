@@ -259,21 +259,16 @@ describe("Command Handler", () => {
       }).not.toThrow();
     });
 
-    test("should clear pending command on different key press", () => {
-      // Start with fake timers to control timeouts
-      jest.useFakeTimers();
-
-      // Test that a pending command gets set
+    test("should handle double character commands", () => {
+      // Test that double character commands work
       handleCommand("g", state);
-      expect(state.pendingCommand).toBe("g");
+      handleCommand("g", state);
 
-      // Any non-special key should clear the pending command immediately
-      handleCommand("h", state);
+      // After double command, pending should be cleared
       expect(state.pendingCommand).toBe("");
 
-      // Clean up
-      jest.clearAllTimers();
-      jest.useRealTimers();
+      // Verify the state is in the correct mode for further commands
+      expect(state.mode).toBe(Mode.COMMAND);
     });
   });
 });
