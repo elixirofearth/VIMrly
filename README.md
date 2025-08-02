@@ -21,16 +21,26 @@ VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into G
 
 ### Steps
 
-1. **Clone and Build:**
+1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/andynapoleon/VIMrly.git
+   git clone https://github.com/elixirofearth/VIMrly.git
    cd VIMrly
+   ```
+
+2. **Install Dependencies:**
+
+   ```bash
    npm install
+   ```
+
+3. **Build the Extension:**
+
+   ```bash
    npm run build
    ```
 
-2. **Load into Chrome:**
+4. **Load into Chrome:**
    - Navigate to `chrome://extensions/`
    - Enable Developer mode
    - Click **Load unpacked** and select the `dist/` folder
