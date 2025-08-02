@@ -260,15 +260,19 @@ describe("Command Handler", () => {
     });
 
     test("should clear pending command on different key press", () => {
+      // Start with fake timers to control timeouts
       jest.useFakeTimers();
 
+      // Test that a pending command gets set
       handleCommand("g", state);
       expect(state.pendingCommand).toBe("g");
 
-      // Interrupt with different command before timeout
+      // Any non-special key should clear the pending command immediately
       handleCommand("h", state);
       expect(state.pendingCommand).toBe("");
 
+      // Clean up
+      jest.clearAllTimers();
       jest.useRealTimers();
     });
   });
