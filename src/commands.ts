@@ -457,8 +457,9 @@ function extendSelectionDown(editor: Document) {
 }
 
 function moveToNextWord(editor: Document, visualMode = false) {
-  // In Google Docs, Ctrl+ArrowRight moves to the next word
-  // use ctrlKey: true to simulate Ctrl key press if in Windows
+  // In Google Docs:
+  // Windows/Linux: Ctrl+ArrowRight moves to the next word
+  // macOS: Option+ArrowRight moves to the next word
   const isMac = /Mac/i.test(navigator.userAgent);
 
   let packet = {
@@ -468,7 +469,8 @@ function moveToNextWord(editor: Document, visualMode = false) {
     which: 39,
     ctrlKey: !isMac,
     shiftKey: visualMode,
-    metaKey: isMac,
+    altKey: isMac,
+    metaKey: false,
   };
 
   console.log("Moving to next word, isMac:", isMac, "packet:", packet);
@@ -476,7 +478,9 @@ function moveToNextWord(editor: Document, visualMode = false) {
 }
 
 function moveToBackWord(editor: Document, visualMode = false) {
-  // Detect if the user is on macOS using userAgent
+  // In Google Docs:
+  // Windows/Linux: Ctrl+ArrowLeft moves to the previous word
+  // macOS: Option+ArrowLeft moves to the previous word
   const isMac = /Mac/i.test(navigator.userAgent);
 
   let packet = {
@@ -486,11 +490,11 @@ function moveToBackWord(editor: Document, visualMode = false) {
     which: 37,
     ctrlKey: !isMac,
     shiftKey: visualMode,
-    metaKey: isMac,
+    altKey: isMac,
+    metaKey: false,
   };
 
   console.log("Moving to previous word, isMac:", isMac, "packet:", packet);
-  // In Google Docs, Ctrl+ArrowLeft moves to the previous word
   simulateNativeEvent(editor.body, "keydown", packet);
 }
 
