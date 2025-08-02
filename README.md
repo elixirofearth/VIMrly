@@ -53,7 +53,7 @@ VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into G
 | `h`, `j`, `k`, `l` | Move left/down/up/right | Basic cursor movement         |
 | `w`, `b`           | Next/previous word      | Word-by-word navigation       |
 | `0`, `$`           | Line start/end          | Beginning and end of line     |
-| `g`, `G`           | Document start/end      | Beginning and end of document |
+| `gg`, `G`          | Document start/end      | Beginning and end of document |
 
 ### Editing (Command Mode)
 
