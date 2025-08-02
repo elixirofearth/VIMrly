@@ -57,16 +57,47 @@ function init() {
 function handleKeydown(event: KeyboardEvent) {
   const globalKeys = ["Escape", "Esc"];
 
-  const commandKeys = ["h", "j", "k", "l", "i", "v", "d", "b", "w", "g", "y", "p", "G", "0", "$", "u", ".", ":", "q"];
-  const commandKeysCore = ["ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight", "Delete", "Home", "End"];
-
+  const commandKeys = [
+    "h",
+    "j",
+    "k",
+    "l",
+    "i",
+    "v",
+    "d",
+    "b",
+    "w",
+    "g",
+    "y",
+    "p",
+    "G",
+    "0",
+    "$",
+    "u",
+    ".",
+    ":",
+    "q",
+  ];
+  const commandKeysCore = [
+    "ArrowLeft",
+    "ArrowDown",
+    "ArrowUp",
+    "ArrowRight",
+    "Delete",
+    "Home",
+    "End",
+  ];
 
   // If we're in command mode
   if (state.isInCommandMode()) {
     // Allow only command keys and global keys
     // if the key is not a command key or a global key, prevent the default action
-    
-    if (!globalKeys.includes(event.key) && !commandKeys.includes(event.key) && !commandKeysCore.includes(event.key)) {
+
+    if (
+      !globalKeys.includes(event.key) &&
+      !commandKeys.includes(event.key) &&
+      !commandKeysCore.includes(event.key)
+    ) {
       event.preventDefault();
       event.stopPropagation();
       return;
@@ -95,7 +126,11 @@ function handleKeydown(event: KeyboardEvent) {
       handleCommand(event.key, state);
     }
     // Let all other keys pass through naturally
-    if (!globalKeys.includes(event.key) && !commandKeys.includes(event.key) && !commandKeysCore.includes(event.key)) {
+    if (
+      !globalKeys.includes(event.key) &&
+      !commandKeys.includes(event.key) &&
+      !commandKeysCore.includes(event.key)
+    ) {
       event.preventDefault();
       event.stopPropagation();
       return;
@@ -131,6 +166,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "toggleCommandMode") {
     const isEnabled = message.enabled;
     setMode(isEnabled ? Mode.COMMAND : Mode.OFF);
+
+    // Send response back to popup
+    sendResponse({ success: true, mode: isEnabled ? "COMMAND" : "OFF" });
+    return true; // Keep the message channel open for async response
   }
 });
 

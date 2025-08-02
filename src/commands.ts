@@ -17,7 +17,6 @@ const getEditor = (): Document | null => {
   return iframe?.contentWindow?.document || null;
 };
 
-
 const simulateNativeEvent = (
   element: Element,
   eventType: string,
@@ -29,11 +28,11 @@ const simulateNativeEvent = (
     view: window,
     ...options,
   });
-  
+
   // Override preventDefault to ensure the event isn't blocked
-  Object.defineProperty(event, 'preventDefault', {
+  Object.defineProperty(event, "preventDefault", {
     value: () => {},
-    writable: false
+    writable: false,
   });
 
   console.log("Simulating Native event", event);
@@ -62,7 +61,7 @@ function handleCommandMode(key: string, state: VimState) {
     return;
   }
 
-   // Handle double-letter commands
+  // Handle double-letter commands
   if (state.pendingCommand) {
     const fullCommand = state.pendingCommand + key;
     console.log("Full command:", fullCommand);
@@ -83,34 +82,33 @@ function handleCommandMode(key: string, state: VimState) {
       case ":q":
         setMode(Mode.OFF);
         clearSelection(editor);
-        state.setPendingCommand("");       
+        state.setPendingCommand("");
         return;
     }
-  } 
+  }
 
-    // Set a pending command for potential double-letter commands and add a timeout
-    if (key === "g" || key === "y" || key === "d") {
-      state.setPendingCommand(key);
-      let commandTimeout = setTimeout(() => {
-        console.log("Single key command:", key);
-        state.setPendingCommand("");
-        // Execute single-key command if no second key is pressed
-        switch (key) {
-          case "d":
-            deleteText(editor);
-            break;
-          case "y":
-            yankText(state);
-            break;
-        }
-      }, 500); // 500 ms timeout for a second key
-      return;
-    }
+  // Set a pending command for potential double-letter commands and add a timeout
+  if (key === "g" || key === "y" || key === "d") {
+    state.setPendingCommand(key);
+    let commandTimeout = setTimeout(() => {
+      console.log("Single key command:", key);
+      state.setPendingCommand("");
+      // Execute single-key command if no second key is pressed
+      switch (key) {
+        case "d":
+          deleteText(editor);
+          break;
+        case "y":
+          yankText(state);
+          break;
+      }
+    }, 500); // 500 ms timeout for a second key
+    return;
+  }
 
   // Clear any pending command if a different key is pressed
   state.setPendingCommand("");
   state.setLastCommand(key);
-
 
   switch (key) {
     case "i":
@@ -152,7 +150,7 @@ function handleCommandMode(key: string, state: VimState) {
       break;
     case "b":
       moveToBackWord(editor);
-      break
+      break;
     case "$":
       moveCursorToLineEnd(editor);
       break;
@@ -177,14 +175,14 @@ function yankLine(state: VimState) {
 
   // First move to the start of the line
   moveCursorToLineStart(editor);
-  
+
   // Press Shift+End to select to end of line
   simulateNativeEvent(editor.body, "keydown", {
     key: "End",
     code: "End",
     keyCode: 35,
     which: 35,
-    shiftKey: true
+    shiftKey: true,
   });
 
   const copyMenuItem = document.querySelector('[aria-label="Copy c"]');
@@ -194,7 +192,6 @@ function yankLine(state: VimState) {
   } else {
     console.error("Copy menu item not found");
   }
-  
 }
 
 function handleInsertMode(key: string, state: VimState) {
@@ -237,7 +234,7 @@ function handleVisualMode(key: string, state: VimState) {
       case "b":
         console.log("Moving back a word");
         moveToBackWord(editor, true);
-        break
+        break;
       case "p":
         pasteText(state);
         state.setMode(Mode.COMMAND);
@@ -267,8 +264,7 @@ function yankText(state: VimState) {
     keyCode: 39,
     which: 39,
     shiftKey: true,
-    ctrlKey: false
-    
+    ctrlKey: false,
   });
 
   const copyMenuItem = document.querySelector('[aria-label="Copy c"]');
@@ -278,57 +274,56 @@ function yankText(state: VimState) {
   } else {
     console.error("Copy menu item not found");
   }
-
 }
 
-
 function pasteText(state: VimState) {
-  navigator.clipboard.readText()
-    .then(text => {
+  navigator.clipboard
+    .readText()
+    .then((text) => {
       const editor = getEditor();
       if (!editor) return;
-      
+
       // Method 1: Use keyboard input events to insert text
-      const input = new InputEvent('insertText', {
+      const input = new InputEvent("insertText", {
         bubbles: true,
         cancelable: true,
         data: text,
-        inputType: 'insertText'
+        inputType: "insertText",
       });
-      
+
       editor.body.dispatchEvent(input);
-      
+
       // Method 2: If Method 1 fails, try simulating keyboard input
       if (!editor.body.textContent?.includes(text)) {
-        Array.from(text).forEach(char => {
-          const keyEvent = new KeyboardEvent('keypress', {
+        Array.from(text).forEach((char) => {
+          const keyEvent = new KeyboardEvent("keypress", {
             key: char,
-            code: 'Key' + char.toUpperCase(),
+            code: "Key" + char.toUpperCase(),
             charCode: char.charCodeAt(0),
             keyCode: char.charCodeAt(0),
             which: char.charCodeAt(0),
             bubbles: true,
             cancelable: true,
-            composed: true
+            composed: true,
           });
           editor.body.dispatchEvent(keyEvent);
         });
       }
     })
-    .catch(err => console.error('Failed to read clipboard:', err));
+    .catch((err) => console.error("Failed to read clipboard:", err));
 }
 
 function deleteSelectedText(state: VimState) {
   const editor = getEditor();
   if (!editor) return;
 
-  // Press Delete to delete the selected text 
+  // Press Delete to delete the selected text
   console.log("Deleting selected text");
   simulateNativeEvent(editor.body, "keydown", {
     key: "Delete",
     code: "Delete",
     keyCode: 46,
-    which: 46
+    which: 46,
   });
 }
 
@@ -337,79 +332,79 @@ function clearSelection(editor: Document) {
 }
 
 function moveCursorLeft(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowLeft", 
-    code: "ArrowLeft", 
-    keyCode: 37, 
-    which: 37 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowLeft",
+    code: "ArrowLeft",
+    keyCode: 37,
+    which: 37,
   });
 }
 
 function moveCursorRight(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowRight", 
-    code: "ArrowRight", 
-    keyCode: 39, 
-    which: 39 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowRight",
+    code: "ArrowRight",
+    keyCode: 39,
+    which: 39,
   });
 }
 
 function moveCursorUp(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowUp", 
-    code: "ArrowUp", 
-    keyCode: 38, 
-    which: 38 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowUp",
+    code: "ArrowUp",
+    keyCode: 38,
+    which: 38,
   });
 }
 
 function moveCursorDown(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowDown", 
-    code: "ArrowDown", 
-    keyCode: 40, 
-    which: 40 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowDown",
+    code: "ArrowDown",
+    keyCode: 40,
+    which: 40,
   });
 }
 
 function moveCursorToLineStart(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "Home", 
-    code: "Home", 
-    keyCode: 36, 
-    which: 36 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "Home",
+    code: "Home",
+    keyCode: 36,
+    which: 36,
   });
 }
 
 function moveCursorToLineEnd(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "End", 
-    code: "End", 
-    keyCode: 35, 
-    which: 35 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "End",
+    code: "End",
+    keyCode: 35,
+    which: 35,
   });
 }
 
 function deleteText(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "Delete", 
-    code: "Delete", 
-    keyCode: 46, 
-    which: 46 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "Delete",
+    code: "Delete",
+    keyCode: 46,
+    which: 46,
   });
 }
 
 function deleteCurrentLine(editor: Document) {
   // First move to the start of the line
   moveCursorToLineStart(editor);
-  
+
   // Press Shift+End to select to end of line
   simulateNativeEvent(editor.body, "keydown", {
     key: "End",
     code: "End",
     keyCode: 35,
     which: 35,
-    shiftKey: true
+    shiftKey: true,
   });
 
   // Press Delete to delete the line
@@ -417,123 +412,143 @@ function deleteCurrentLine(editor: Document) {
     key: "Delete",
     code: "Delete",
     keyCode: 46,
-    which: 46
+    which: 46,
   });
 }
 
-
 function extendSelectionLeft(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowLeft", 
-    code: "ArrowLeft", 
-    keyCode: 37, 
-    which: 37, 
-    shiftKey: true 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowLeft",
+    code: "ArrowLeft",
+    keyCode: 37,
+    which: 37,
+    shiftKey: true,
   });
 }
 
 function extendSelectionRight(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowRight", 
-    code: "ArrowRight", 
-    keyCode: 39, 
-    which: 39, 
-    shiftKey: true 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowRight",
+    code: "ArrowRight",
+    keyCode: 39,
+    which: 39,
+    shiftKey: true,
   });
 }
 
 function extendSelectionUp(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowUp", 
-    code: "ArrowUp", 
-    keyCode: 38, 
-    which: 38, 
-    shiftKey: true 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowUp",
+    code: "ArrowUp",
+    keyCode: 38,
+    which: 38,
+    shiftKey: true,
   });
 }
 
 function extendSelectionDown(editor: Document) {
-  simulateNativeEvent(editor.body, "keydown", { 
-    key: "ArrowDown", 
-    code: "ArrowDown", 
-    keyCode: 40, 
-    which: 40, 
-    shiftKey: true 
+  simulateNativeEvent(editor.body, "keydown", {
+    key: "ArrowDown",
+    code: "ArrowDown",
+    keyCode: 40,
+    which: 40,
+    shiftKey: true,
   });
 }
 
 function moveToNextWord(editor: Document, visualMode = false) {
   // In Google Docs, Ctrl+ArrowRight moves to the next word
   // use ctrlKey: true to simulate Ctrl key press if in Windows
+  const isMac = /Mac/i.test(navigator.userAgent);
+
   let packet = {
     key: "ArrowRight",
     code: "ArrowRight",
     keyCode: 39,
     which: 39,
-    ctrlKey: true,
-    shiftKey: false,
-    metaKey: false
-  }
-  if (visualMode) {
-    packet.shiftKey = true;
-  }
+    ctrlKey: !isMac,
+    shiftKey: visualMode,
+    metaKey: isMac,
+  };
 
-  // Detect if the user is on macOS using userAgent
-  const isMac = /Mac/i.test(navigator.userAgent);
-  if (isMac) {
-    packet.metaKey = true;
-    packet.ctrlKey = false;
-  }
-
+  console.log("Moving to next word, isMac:", isMac, "packet:", packet);
   simulateNativeEvent(editor.body, "keydown", packet);
 }
 
 function moveToBackWord(editor: Document, visualMode = false) {
+  // Detect if the user is on macOS using userAgent
+  const isMac = /Mac/i.test(navigator.userAgent);
+
   let packet = {
     key: "ArrowLeft",
     code: "ArrowLeft",
     keyCode: 37,
     which: 37,
-    ctrlKey: true,
-    shiftKey: false,
-    metaKey: false
-  }
-  if (visualMode) {
-    packet.shiftKey = true;
-  }
-  // Detect if the user is on macOS using userAgent
-  const isMac = /Mac/i.test(navigator.userAgent);
-  if (isMac) {
-    packet.metaKey = true;
-    packet.ctrlKey = false;
-  }
+    ctrlKey: !isMac,
+    shiftKey: visualMode,
+    metaKey: isMac,
+  };
 
+  console.log("Moving to previous word, isMac:", isMac, "packet:", packet);
   // In Google Docs, Ctrl+ArrowLeft moves to the previous word
   simulateNativeEvent(editor.body, "keydown", packet);
 }
 
 function moveCursorToDocStart(editor: Document) {
-  // In Google Docs, Ctrl+Home moves to the start of the document
-  simulateNativeEvent(editor.body, "keydown", {
-    key: "Home",
-    code: "Home",
-    keyCode: 36,
-    which: 36,
-    ctrlKey: true
-  });
+  // In Google Docs, Ctrl+Home (Windows/Linux) or Cmd+Home (macOS) moves to the start of the document
+  const isMac = /Mac/i.test(navigator.userAgent);
+
+  console.log("Moving to document start, isMac:", isMac);
+
+  // Try Cmd+Up Arrow first on macOS (alternative approach)
+  if (isMac) {
+    simulateNativeEvent(editor.body, "keydown", {
+      key: "ArrowUp",
+      code: "ArrowUp",
+      keyCode: 38,
+      which: 38,
+      metaKey: true,
+      ctrlKey: false,
+    });
+  } else {
+    simulateNativeEvent(editor.body, "keydown", {
+      key: "Home",
+      code: "Home",
+      keyCode: 36,
+      which: 36,
+      ctrlKey: true,
+      metaKey: false,
+    });
+  }
 }
 
 function moveCursorToDocEnd(editor: Document) {
-  // In Google Docs, Ctrl+End moves to the end of the document
-  simulateNativeEvent(editor.body, "keydown", {
-    key: "End",
-    code: "End",
-    keyCode: 35,
-    which: 35,
-    ctrlKey: true
-  });
-}
+  // In Google Docs, Ctrl+End (Windows/Linux) or Cmd+End (macOS) moves to the end of the document
+  const isMac = /Mac/i.test(navigator.userAgent);
 
+  console.log("Moving to document end, isMac:", isMac);
+
+  // Try Cmd+Down Arrow first on macOS (alternative approach)
+  if (isMac) {
+    simulateNativeEvent(editor.body, "keydown", {
+      key: "ArrowDown",
+      code: "ArrowDown",
+      keyCode: 40,
+      which: 40,
+      metaKey: true,
+      ctrlKey: false,
+    });
+  } else {
+    simulateNativeEvent(editor.body, "keydown", {
+      key: "End",
+      code: "End",
+      keyCode: 35,
+      which: 35,
+      ctrlKey: true,
+      metaKey: false,
+    });
+  }
+}
 
 function simulateClick(element: HTMLElement) {
   const mousedownEvent = new MouseEvent("mousedown", {
@@ -557,11 +572,13 @@ function simulateClick(element: HTMLElement) {
   element.dispatchEvent(clickEvent);
 }
 
-
-
 function performUndo() {
-  const undoButton = document.querySelector('div[data-tooltip="Undo (Ctrl+Z)"]') as HTMLElement;
-  const undoButtonMac = document.querySelector('div[data-tooltip="Undo (⌘Z)"]') as HTMLElement;
+  const undoButton = document.querySelector(
+    'div[data-tooltip="Undo (Ctrl+Z)"]'
+  ) as HTMLElement;
+  const undoButtonMac = document.querySelector(
+    'div[data-tooltip="Undo (⌘Z)"]'
+  ) as HTMLElement;
 
   if (undoButton) {
     simulateClick(undoButton);
@@ -572,8 +589,12 @@ function performUndo() {
   }
 }
 function performRedo() {
-  const redoButton = document.querySelector('div[data-tooltip="Redo (Ctrl+Y)"]') as HTMLElement;
-  const redoButtonMac = document.querySelector('div[data-tooltip="Redo (⌘Y)"]') as HTMLElement;
+  const redoButton = document.querySelector(
+    'div[data-tooltip="Redo (Ctrl+Y)"]'
+  ) as HTMLElement;
+  const redoButtonMac = document.querySelector(
+    'div[data-tooltip="Redo (⌘Y)"]'
+  ) as HTMLElement;
   if (redoButton) {
     simulateClick(redoButton);
   } else if (redoButtonMac) {
