@@ -47,6 +47,7 @@ describe("Content Script", () => {
     test("should update existing status bar", () => {
       setMode(Mode.COMMAND);
       const statusBar1 = document.getElementById("vim-status-bar");
+      expect(statusBar1?.textContent).toBe("MODE: COMMAND");
 
       setMode(Mode.INSERT);
       const statusBar2 = document.getElementById("vim-status-bar");
@@ -61,6 +62,8 @@ describe("Content Script", () => {
       modes.forEach((mode) => {
         setMode(mode);
         const statusBar = document.getElementById("vim-status-bar");
+
+        expect(statusBar).toBeTruthy(); // Status bar should exist
 
         if (mode === Mode.OFF) {
           expect(statusBar?.style.display).toBe("none");
@@ -338,10 +341,12 @@ describe("Content Script", () => {
     test("should update status bar when state changes", () => {
       setMode(Mode.COMMAND);
       let statusBar = document.getElementById("vim-status-bar");
+      expect(statusBar).toBeTruthy();
       expect(statusBar?.textContent).toBe("MODE: COMMAND");
 
       setMode(Mode.INSERT);
       statusBar = document.getElementById("vim-status-bar");
+      expect(statusBar).toBeTruthy();
       expect(statusBar?.textContent).toBe("MODE: INSERT");
     });
   });
