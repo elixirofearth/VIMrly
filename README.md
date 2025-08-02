@@ -2,48 +2,96 @@
 
 ## Vim Motions Chrome Extension for Google Docs 📝
 
-VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into Google Docs, enhancing text editing efficiency and user productivity. Built and tested using **TypeScript**, **Webpack**, and **Jest**, VIMrly aims to provide a seamless modal editing experience for Vim enthusiasts working within Google Docs.
+VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into Google Docs, enhancing text editing efficiency and user productivity. Built and tested using **TypeScript**, **Webpack**, and **Jest**, VIMrly provides a seamless modal editing experience for Vim enthusiasts working within Google Docs.
 
 ## Features 📈
 
-- **Vim-like Navigation:** Utilize `h`, `j`, `k`, `l` keys for efficient cursor movement within documents, and many other Vim commands!
-- **Modal Editing:** Switch between Command, Insert, and Visual modes to control editing behaviour.
-- **Status Bar:** A dynamic status bar at the bottom displays the current mode for real-time feedback.
-- **Settings Popup:** Customize extension settings, such as enabling or disabling specific modes, through an intuitive popup interface.
-- **Seamless Integration:** Designed to work harmoniously with Google Docs without disrupting native functionalities.
+- **Modal Editing:** Command, Insert, and Visual modes
+- **Vim Navigation:** `h`, `j`, `k`, `l` and many other Vim commands
+- **Status Bar:** Real-time mode feedback at the bottom of the screen
+- **Cross-Platform:** Works on Windows, macOS, and Linux
+- **Seamless Integration:** Harmonious with Google Docs native functionality
 
 ## Installation ⚙️
 
 ### Prerequisites
-- **Google Chrome:** Ensure you have the latest version of Google Chrome installed.
-- **Node.js and npm:** Required for building the extension from source.
+
+- **Google Chrome:** Latest version
+- **Node.js and npm:** For building from source
 
 ### Steps
 
-1. **Clone the Repository:**
+1. **Clone and Build:**
+
    ```bash
    git clone https://github.com/andynapoleon/VIMrly.git
    cd VIMrly
+   npm install
+   npm run build
    ```
 
-2. **Install Dependencies**:
-   
-  ```bash
-  npm install
-  ```
+2. **Load into Chrome:**
+   - Navigate to `chrome://extensions/`
+   - Enable Developer mode
+   - Click **Load unpacked** and select the `dist/` folder
 
-3. **Build the Extension**:
-  
-  ```bash
-  npm run build
-  ```
-  - _This command compiles the TypeScript files, bundles the scripts and styles, and copies necessary assets into the `dist/` directory._
+## Vim Commands Reference
 
-4. **Load the Extension into Chrome**:
-  - Open Chrome and navigate to `chrome://extensions/`.
-  - Enable Developer mode by toggling the switch in the top right corner.
-  - Click on **Load unpacked** and select the `dist/` folder from the cloned repository.
-  - The **VIMrly** extension should now appear in your list of extensions and its icon in the Chrome toolbar.
+### Mode Switching
+
+| Command | Action                 |
+| ------- | ---------------------- |
+| `i`     | Enter Insert mode      |
+| `v`     | Enter Visual mode      |
+| `Esc`   | Return to Command mode |
+| `:q`    | Turn off Vim mode      |
+
+### Navigation (Command Mode)
+
+| Command            | Action                  | Description                   |
+| ------------------ | ----------------------- | ----------------------------- |
+| `h`, `j`, `k`, `l` | Move left/down/up/right | Basic cursor movement         |
+| `w`, `b`           | Next/previous word      | Word-by-word navigation       |
+| `0`, `$`           | Line start/end          | Beginning and end of line     |
+| `g`, `G`           | Document start/end      | Beginning and end of document |
+
+### Editing (Command Mode)
+
+| Command   | Action           | Description                     |
+| --------- | ---------------- | ------------------------------- |
+| `d`, `dd` | Delete char/line | Delete character or entire line |
+| `y`, `yy` | Yank char/line   | Copy character or entire line   |
+| `p`       | Paste            | Paste clipboard contents        |
+| `u`, `.`  | Undo/Redo        | History navigation              |
+
+### Visual Mode
+
+In Visual mode, use the same navigation keys (`h`, `j`, `k`, `l`, `w`, `b`) to extend selection, then:
+
+- `y` - Copy selection and exit visual mode
+- `d` - Delete selection and exit visual mode
+- `p` - Paste and exit visual mode
+
+## Technical Notes
+
+- **Platform Support:** Automatically detects OS for correct key combinations
+  - Windows/Linux: `Ctrl` + keys
+  - macOS: `Option` for words, `Cmd` for document navigation
+- **Google Docs Only:** Extension only activates on `docs.google.com`
+- **Status Bar:** Shows current mode (COMMAND/INSERT/VISUAL)
+
+## Development
+
+```bash
+# Run tests
+npm test
+
+# Build for development
+npm run build
+
+# Watch mode for development
+npm run dev
+```
 
 ## Contact 📞
 
