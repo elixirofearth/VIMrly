@@ -10,7 +10,7 @@ https://github.com/user-attachments/assets/ff551675-edfc-46a1-9726-0b3041dad423
 
 
 
-## Features 
+## 🚀 Features 
 
 - **Modal Editing:** Command, Insert, and Visual modes
 - **Vim Navigation:** `h`, `j`, `k`, `l` and many other Vim commands
@@ -18,7 +18,7 @@ https://github.com/user-attachments/assets/ff551675-edfc-46a1-9726-0b3041dad423
 - **Cross-Platform:** Works on Windows, macOS, and Linux
 - **Seamless Integration:** Harmonious with Google Docs native functionality
 
-## Installation 
+## 🔧 Installation 
 
 ### Prerequisites
 
@@ -51,7 +51,7 @@ https://github.com/user-attachments/assets/ff551675-edfc-46a1-9726-0b3041dad423
    - Enable Developer mode
    - Click **Load unpacked** and select the `dist/` folder
 
-## Vim Commands Reference
+## 📚 Vim Commands Reference
 
 ### Mode Switching
 
@@ -88,13 +88,13 @@ In Visual mode, use the same navigation keys (`h`, `j`, `k`, `l`, `w`, `b`) to e
 - `d` - Delete selection and exit visual mode
 - `p` - Paste and exit visual mode
 
-## Technical Notes
+## 💡 Technical Notes
 
 - **Platform Support:** Automatically detects OS for correct key combinations
 - **Google Docs Only:** Extension only activates on `docs.google.com`
 - **Status Bar:** Shows current mode (COMMAND/INSERT/VISUAL)
 
-## Contact 
+## 📞 Contact 
 
 Developed by:
 
