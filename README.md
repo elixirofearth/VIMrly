@@ -1,6 +1,6 @@
-# VIMrly 🖋️
+# 📝 VIMrly 🖋️
 
-## Vim Motions Chrome Extension for Google Docs 📝
+## Vim Motions Chrome Extension for Google Docs 
 
 VIMrly is a Chrome Extension that integrates Vim-style keyboard shortcuts into Google Docs, enhancing text editing efficiency and user productivity. Built and tested using **TypeScript**, **Webpack**, and **Jest**, VIMrly provides a seamless modal editing experience for Vim enthusiasts working within Google Docs.
 
@@ -10,7 +10,7 @@ https://github.com/user-attachments/assets/ff551675-edfc-46a1-9726-0b3041dad423
 
 
 
-## Features 📈
+## Features 
 
 - **Modal Editing:** Command, Insert, and Visual modes
 - **Vim Navigation:** `h`, `j`, `k`, `l` and many other Vim commands
@@ -18,7 +18,7 @@ https://github.com/user-attachments/assets/ff551675-edfc-46a1-9726-0b3041dad423
 - **Cross-Platform:** Works on Windows, macOS, and Linux
 - **Seamless Integration:** Harmonious with Google Docs native functionality
 
-## Installation ⚙️
+## Installation 
 
 ### Prerequisites
 
@@ -94,7 +94,7 @@ In Visual mode, use the same navigation keys (`h`, `j`, `k`, `l`, `w`, `b`) to e
 - **Google Docs Only:** Extension only activates on `docs.google.com`
 - **Status Bar:** Shows current mode (COMMAND/INSERT/VISUAL)
 
-## Contact 📞
+## Contact 
 
 Developed by:
 
