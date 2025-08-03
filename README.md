@@ -91,23 +91,8 @@ In Visual mode, use the same navigation keys (`h`, `j`, `k`, `l`, `w`, `b`) to e
 ## Technical Notes
 
 - **Platform Support:** Automatically detects OS for correct key combinations
-  - Windows/Linux: `Ctrl` + keys
-  - macOS: `Option` for words, `Cmd` for document navigation
 - **Google Docs Only:** Extension only activates on `docs.google.com`
 - **Status Bar:** Shows current mode (COMMAND/INSERT/VISUAL)
-
-## Development
-
-```bash
-# Run tests
-npm test
-
-# Build for development
-npm run build
-
-# Watch mode for development
-npm run dev
-```
 
 ## Contact 📞
 
